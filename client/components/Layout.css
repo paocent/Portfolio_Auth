@@ -1,0 +1,73 @@
+/* General body styling for a dark theme */
+body {
+    background-color: #121212; /* A dark, soft black */
+    color: #e0e0e0; /* A light grey for text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Overall container for the layout */
+.wrapper {
+    /* Centering the container */
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1000px;
+    padding: 30px;
+    background-color: #1e1e1e; /* A slightly lighter black for the container */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+/* Header and Navigation Styles */
+header {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #00bfff; /* A professional accent color (deep sky blue) */
+    margin-bottom: 10px;
+}
+
+nav a {
+    color: #e0e0e0; /* Links are the same color as the body text */
+    text-decoration: none;
+    font-size: 1.1rem;
+    margin: 0 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+nav a:hover {
+    color: #00bfff; /* Highlight on hover with the accent color */
+    text-decoration: underline;
+}
+
+/* Horizontal rule for separation */
+hr {
+    border: none;
+    height: 1px;
+    background-color: #444;
+    margin: 20px 0;
+}
+
+/* Main content area */
+main {
+    text-align: left;
+}
+
+/* Footer styling */
+footer {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 20px;
+}
+
+.logo {
+    max-width: 100px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+}
