@@ -10,6 +10,7 @@ import contactsRoutes from './routes/contacts.routes.js'  
 import educationRoutes from './routes/education.routes.js'
 import projectsRoutes from './routes/project.routes.js'
 
+
 // Fix 1: Removed duplicate 'import cookieParser from 'cookie-parser''
 // The import is handled above.
 
