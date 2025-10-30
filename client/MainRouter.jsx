@@ -10,6 +10,7 @@ import Project from './src/project';
 import Layout from './components/Layout';
 import Services from './src/Services';
 
+
 const MainRouter = () => {
   return (
     <div className="container">
@@ -21,6 +22,7 @@ const MainRouter = () => {
           <Route path="project" element={<Project />} />
           <Route path="contact" element={<Contact />} />
           <Route path="services" element={<Services />} />
+          
         </Route>
       </Routes>
     </div>
