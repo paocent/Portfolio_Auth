@@ -1,8 +1,8 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardContent from "@ mui/material/CardContent";
-import CardMedia from "@ mui/material/CardMedia";
-import Typography from "@mui/material/T ypography";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import unicornbikeImg from "./../assets/images/unicornbikeImg.jpg";
 const Home = () => {
