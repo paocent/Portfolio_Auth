@@ -43,12 +43,13 @@ All Users
 </Typography>
 <List dense>
 {users.map((item, i) => (
-<Link component={RouterLink} to={`/user/${item._id}`} key={i}>component={RouterLink} to={`/user/${item._id}`}
+<Link
+component={RouterLink}
+to={`/user/${item._id}`}
 underline="none"
 key={item._id}
 sx={{ color: "inherit" }}
-
-    
+>
 <ListItem button>
 <ListItemAvatar>
 <Avatar />

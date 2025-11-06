@@ -34,6 +34,7 @@ function MainRouter() {
           <Route path="users" element={<Users />} />
           <Route path="signup" element={<Signup />} />
           <Route path="signin" element={<SignIn />} />
+          <Route path="profile" element={<Profile />} />
 
           <Route
             path="user/edit/:userId"
