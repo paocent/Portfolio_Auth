@@ -19,7 +19,8 @@ export default function Layout() {
             <Link to="/contact" className="contact">Contact Me</Link>
             | <Link to="/services" className="services">Services</Link>
             | <Link to="/signin" className="signin">Sign In</Link>
-            | <Link to="/users" className="users">Users</Link>
+           
+
           </nav>
         </header>
 
