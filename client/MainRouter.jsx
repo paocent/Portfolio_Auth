@@ -16,11 +16,13 @@ import SignIn from './lib/SignIn';
 import Profile from './user/Profile';
 import PrivateRoute from './lib/PrivateRoute';
 import EditProfile from './user/EditProfile';
-
-
-const MainRouter = () => {
+import Menu from './core/Menu';
+function MainRouter() {
   return (
     <div className="container">
+      <Menu />
+
+
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -38,6 +40,7 @@ const MainRouter = () => {
             element={<PrivateRoute><EditProfile /></PrivateRoute>}
           />
           <Route path="user/:userId" element={<Profile />} />
+          
 
           
    
