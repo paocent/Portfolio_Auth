@@ -11,6 +11,7 @@ import Layout from './components/Layout';
 import Services from './src/Services';
 import Home from './components/home';
 import SignIn from './auth/Signin';
+import Users from './user/Users';
 
 const MainRouter = () => {
   return (
@@ -24,6 +25,8 @@ const MainRouter = () => {
           <Route path="contact" element={<Contact />} />
           <Route path="services" element={<Services />} />
           <Route path="Signin" element={<SignIn />} />
+          <Route path="users" element={<Users />} />
+
 
           
         </Route>
