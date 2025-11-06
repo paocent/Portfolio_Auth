@@ -8,6 +8,7 @@ import Education from './src/education'
 import Project from './src/project'
 import Layout from './components/Layout'
 import Home from './core/Home'
+import SignIn from './auth/Signin'
 
 const MainRouter = () => {
 return (<div className="container">
@@ -18,6 +19,7 @@ return (<div className="container">
 <Route exact path="/education" element={<Education />} />
 <Route exact path="/project" element={<Project />} />
 <Route exact path="/contact" element={<Contact />} />
+<Route exact path="/Signin" element={<SignIn />} />
 
 {/* Outlet for nested routes */}
 </Routes>
