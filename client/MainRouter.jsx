@@ -9,7 +9,7 @@ import Education from './src/education';
 import Project from './src/project';
 import Layout from './components/Layout';
 import Services from './src/Services';
-import Home from './core/Home';
+import Home from './components/home';
 import SignIn from './auth/Signin';
 
 const MainRouter = () => {
