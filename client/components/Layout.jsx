@@ -1,25 +1,33 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import './Layout.css';
-{/* Importing a logo image from src/asset/LOGO.png */}
-import logo from '../src/assets/LOGO.png';
+{/* FIX: Corrected the relative path for the logo import */}
+import logo from '../src/assets/LOGO.png'; 
+// Assuming Layout.jsx is in 'src/components/' and LOGO.png is in 'src/assets/'
+
 export default function Layout() {
   return (
     <>
       <div className="wrapper">
         <header>
-          <img src={logo} alt="Logo" className="logo" />
-          <h1>My Portfolio</h1>
+          {/* Enhanced: Added a container for the logo and title */}
+          <div className="header-content"> 
+            <img src={logo} alt="Logo" className="logo" />
+            <h1>My Portfolio</h1>
+          </div>
           <nav>
-            {/* Navigation Links with class for CSS */}
-            <Link to="/" className="home">Home</Link> |
-            <Link to="/about" className="about">About Me</Link> |
-            <Link to="/education" className="education">Education</Link> |
-            <Link to="/project" className="project">Project</Link> |
-            <Link to="/contact" className="contact">Contact Me</Link>
-            | <Link to="/services" className="services">Services</Link>
-           
-
+            {/* Navigation Links with class for CSS - Using fragments for separators */}
+            <Link to="/" className="nav-link home">Home</Link> 
+            <span className="separator">|</span>
+            <Link to="/about" className="nav-link about">About Me</Link> 
+            <span className="separator">|</span>
+            <Link to="/education" className="nav-link education">Education</Link> 
+            <span className="separator">|</span>
+            <Link to="/project" className="nav-link project">Project</Link> 
+            <span className="separator">|</span>
+            <Link to="/contact" className="nav-link contact">Contact Me</Link>
+            <span className="separator">|</span>
+            <Link to="/services" className="nav-link services">Services</Link>
           </nav>
         </header>
 
@@ -27,7 +35,6 @@ export default function Layout() {
 
         <main>
           <Outlet />
-          {/* This is where the routed components will be rendered */}
         </main>
 
         <hr />

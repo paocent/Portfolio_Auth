@@ -12,62 +12,97 @@ body {
     /* Centering the container */
     margin: 20px auto;
     width: 90%;
-    max-width: 1000px;
+    max-width: 1200px; /* Increased max-width for modern feel */
     padding: 30px;
     background-color: #1e1e1e; /* A slightly lighter black for the container */
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); /* Deeper shadow */
 }
 
 /* Header and Navigation Styles */
 header {
+    /* Use Flexbox to align header content (logo/title) and navigation */
+    display: flex;
+    flex-direction: column; /* Stack header content and nav vertically */
+    align-items: center; /* Center items horizontally */
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333; /* Subtle separation line */
+}
+
+/* New container for the logo and title, allowing them to sit next to each other */
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between logo and title */
+    margin-bottom: 15px; /* Space above the navigation */
 }
 
 h1 {
     font-size: 2.5rem;
-    color: #00bfff; /* A professional accent color (deep sky blue) */
-    margin-bottom: 10px;
+    color: #00bfff; /* Deep Sky Blue accent color */
+    margin: 0; /* Remove default margin */
 }
 
-nav a {
-    color: #e0e0e0; /* Links are the same color as the body text */
+.logo {
+    width: 60px; /* Reduced logo size for a cleaner look */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%; /* Circle logo for modern touch */
+    border: 2px solid #00bfff; /* Accent border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+nav {
+    display: flex; /* Use flex for navigation links */
+    gap: 10px; /* Spacing between links and separators */
+    flex-wrap: wrap; /* Allow navigation to wrap on small screens */
+    justify-content: center;
+}
+
+.nav-link {
+    color: #e0e0e0;
     text-decoration: none;
     font-size: 1.1rem;
-    margin: 0 15px;
-    transition: color 0.3s ease-in-out;
+    padding: 5px 10px; /* Added padding for larger clickable area */
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
 }
 
-nav a:hover {
-    color: #00bfff; /* Highlight on hover with the accent color */
-    text-decoration: underline;
+.nav-link:hover, .nav-link.active { /* Added .active state for current page if you use one */
+    color: #1e1e1e;
+    background-color: #00bfff; /* Highlight on hover with the accent color background */
+    text-decoration: none; /* Removed underline on hover since background is used */
+}
+
+/* Styling for the separator */
+.separator {
+    color: #444; /* Darker color for separator */
+    user-select: none; /* Prevents text selection on separator */
+    font-size: 1.1rem;
+    align-self: center; /* Vertically center with links */
 }
 
 /* Horizontal rule for separation */
 hr {
     border: none;
     height: 1px;
-    background-color: #444;
-    margin: 20px 0;
+    background-color: #333; /* Darker line */
+    margin: 30px 0; /* Increased margin for better spacing */
 }
 
 /* Main content area */
 main {
     text-align: left;
+    min-height: 400px; /* Ensure main content has some minimum space */
+    padding: 20px 0;
 }
 
 /* Footer styling */
 footer {
     font-size: 0.9rem;
     color: #888;
-    margin-top: 20px;
-}
-
-.logo {
-    max-width: 100px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    
+    margin-top: 30px;
+    padding-top: 10px;
+    border-top: 1px solid #333; /* Subtle separation line */
 }
