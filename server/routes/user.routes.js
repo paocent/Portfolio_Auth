@@ -15,7 +15,7 @@ router.route('/api/users/all')
     
 
 // 3. Define the PARAMETER HANDLER.
-router.param('userId', userCtrl.userByID)
+router.param('userId', userCtrl.userByID) // this will run first whenever :userId is present in the route
 
 // 4. Define the parameterized route last.
 // The path '/api/users/:userId' will now only be used if it doesn't match '/api/users/all'.
