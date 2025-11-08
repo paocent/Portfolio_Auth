@@ -57,6 +57,7 @@ setValues({ ...values, [name]: event.target.value });
 };
 if (values.NavigateToProfile) {
 return <Navigate to={`/user/${values.userId}`} />;
+}
 return (
 <Card
 sx={{
@@ -121,5 +122,4 @@ Submit
 </CardActions>
 </Card>
 );
-}
 }
