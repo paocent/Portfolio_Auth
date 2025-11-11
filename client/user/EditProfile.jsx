@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
     Card,
     CardActions,
@@ -27,15 +27,21 @@ export default function EditProfile() {
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
+
         read({ userId }, { t: jwt.token }, signal).then((data) => {
             if (data?.error) {
                 setValues((prev) => ({ ...prev, error: data.error }));
             } else {
-                setValues((prev) => ({ ...prev, name: data.name, email: data.email }));
+                setValues((prev) => ({
+                    ...prev,
+                    name: data.name || "",
+                    email: data.email || "",
+                }));
             }
         });
+
         return () => abortController.abort();
-    }, [userId]);
+    }, [userId, jwt.token]);
 
     const clickSubmit = () => {
         const user = {
@@ -57,7 +63,7 @@ export default function EditProfile() {
     };
 
     const handleChange = (name) => (event) => {
-        setValues({ ...values, [name]: event.target.value });
+        setValues((prev) => ({ ...prev, [name]: event.target.value }));
     };
 
     if (values.NavigateToProfile) {
@@ -75,7 +81,7 @@ export default function EditProfile() {
             }}
         >
             <CardContent>
-                <Typography variant="h6" sx={{ mt: 2, mb: 2, color: "text.primary" }}></Typography>
+                <Typography variant="h6" sx={{ mt: 2, mb: 2, color: "text.primary" }}>
                     Edit Profile
                 </Typography>
                 <TextField
@@ -117,12 +123,7 @@ export default function EditProfile() {
                 )}
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={clickSubmit}
-                    sx={{ mb: 2 }}
-                >
+                <Button color="primary" variant="contained" onClick={clickSubmit} sx={{ mb: 2 }}>
                     Submit
                 </Button>
             </CardActions>
