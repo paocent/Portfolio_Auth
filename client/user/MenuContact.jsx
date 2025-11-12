@@ -15,40 +15,41 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import DeleteContacts from "./DeleteContacts.jsx";
 import auth from "../lib/auth-helper.js";
-// 🚨 NOTE: We now use the 'list' function from the API
 import { list } from "./api-contacts.js"; 
 import { useLocation, Navigate, Link } from "react-router-dom"; 
-// useParams is not needed for a list view, so it's removed if it was here
 
 export default function MenuContacts() {
     const location = useLocation();
-    // 💡 contacts is now initialized as an empty ARRAY
     const [contacts, setContacts] = useState([]); 
     const [redirectToSignin, setRedirectToSignin] = useState(false);
-    const jwt = auth.isAuthenticated();
-    // const userId = jwt.user && jwt.user._id; // Not needed for general list
+    
+    // Get JWT once
+    const jwt = auth.isAuthenticated(); 
+    
+    // Define isAdmin based on the JWT
+    const isAdmin = jwt.user && jwt.user.role === "admin"; 
+    
+    // Get the current user's ID to check for ownership
+    const currentUserId = jwt.user ? jwt.user._id : null;
     
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
         
-        // 1. CALL THE LIST FUNCTION (No ID parameter needed)
         list(signal).then((data) => { 
             if (data && data.error) {
-                // If the error is due to authentication, redirect
                 if (data.error === "Unauthorized") {
                     setRedirectToSignin(true);
                 } else {
                     console.error("Failed to fetch contact list:", data.error);
                 }
             } else {
-                // 2. Set the state with the returned array of contacts
                 setContacts(data); 
             }
         });
         
         return () => abortController.abort();
-    }, [jwt.token]); // Dependency array simplified
+    }, [jwt.token]); 
 
     if (redirectToSignin) {
         return <Navigate to="/signin" state={{ from: location.pathname }} replace />;
@@ -68,7 +69,6 @@ export default function MenuContacts() {
                 All Contacts
             </Typography>
             <List dense>
-                {/* 3. MAP over the 'contacts' array to display each item */}
                 {contacts.length === 0 ? (
                     <ListItem>
                         <ListItemText 
@@ -78,23 +78,28 @@ export default function MenuContacts() {
                         />
                     </ListItem>
                 ) : (
-                    contacts.map((contact, i) => (
-                        <span key={i}>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <PersonIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                {/* Display name and email */}
-                                <ListItemText 
-                                    primary={contact.name} 
-                                    secondary={contact.email} 
-                                />
-                                
-                                {/* Show Edit/Delete only if the logged-in user owns this contact */}
-                                {auth.isAuthenticated().user &&
-                                    auth.isAuthenticated().user._id === contact._id && (
+                    contacts.map((contact, i) => {
+                        // Check if the current contact is owned by the logged-in user
+                        const isOwner = currentUserId === contact._id;
+
+                        // NEW LOGIC: Show actions if user is Admin OR user is the Owner
+                        const showActions = isAdmin || isOwner;
+
+                        return (
+                            <span key={i}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <PersonIcon />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText 
+                                        primary={contact.name} 
+                                        secondary={contact.email} 
+                                    />
+                                    
+                                    {/* APPLY THE NEW CONDITIONAL LOGIC */}
+                                    {showActions && (
                                         <ListItemSecondaryAction>
                                             <Link to={`/contacts/edit/${contact._id}`}>
                                                 <IconButton aria-label="Edit" color="primary">
@@ -104,10 +109,11 @@ export default function MenuContacts() {
                                             <DeleteContacts contactId={contact._id} />
                                         </ListItemSecondaryAction>
                                     )}
-                            </ListItem>
-                            <Divider />
-                        </span>
-                    ))
+                                </ListItem>
+                                <Divider />
+                            </span>
+                        )
+                    })
                 )}
             </List>
         </Paper>

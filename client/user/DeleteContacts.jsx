@@ -11,64 +11,78 @@ import DialogTitle from "@mui/material/DialogTitle";
 import auth from "../lib/auth-helper.js";
 import { remove } from "./api-contacts.js";
 import { Navigate } from "react-router-dom";
-export default function DeleteContacts({ contactId }) {
-const [open, setOpen] = useState(false);
-const [redirect, setRedirect] = useState(false);
-const jwt = auth.isAuthenticated();
-const clickButton = () => {
-setOpen(true);
-};
-const deleteAccount = () => {
-remove({ contactId }, { t: jwt.token }).then((data) => {
-if (data?.error) {
-console.error(data.error);
-} else {
-auth.clearJWT(() => console.log("deleted"));
-setRedirect(true);
-}
-});
-};
-const handleRequestClose = () => {
-setOpen(false);
-};
-if (redirect) {
-return <Navigate to="/" />;
-}
-return (
-<>
 
-<IconButton
-aria-label="Delete account"
-onClick={clickButton}
-color="error"
->
-<DeleteIcon />
-</IconButton>
-<Dialog open={open} onClose={handleRequestClose}>
-<DialogTitle>Delete Account</DialogTitle>
-<DialogContent>
-<DialogContentText>
-Are you sure you want to delete your account? This action is
-irreversible.
-</DialogContentText>
-</DialogContent>
-<DialogActions>
-<Button onClick={handleRequestClose} color="primary">
-Cancel
-</Button>
-<Button
-onClick={deleteAccount}
-color="error"
-variant="contained"
-autoFocus
->
-Confirm
-</Button>
-</DialogActions>
-</Dialog>
-</>
-);
+// Renamed component to singular for better naming convention
+export default function DeleteContact({ contactId }) {
+    const [open, setOpen] = useState(false);
+    // Set redirect to point to the contact list after deletion
+    const [redirect, setRedirect] = useState(false);
+    const jwt = auth.isAuthenticated();
+
+    const clickButton = () => {
+        setOpen(true);
+    };
+
+    // Updated function name and logic to handle contact deletion
+    const handleDelete = () => {
+        // Call the remove API function, passing contactId and token
+        remove({ contactId }, { t: jwt.token }).then((data) => {
+            if (data?.error) {
+                console.error(data.error);
+            } else {
+                // SUCCESS: DO NOT call auth.clearJWT(). That logs the user out.
+                // Simply set redirect to send the user back to the contact list.
+                setRedirect(true);
+            }
+        });
+    };
+
+    const handleRequestClose = () => {
+        setOpen(false);
+    };
+
+    if (redirect) {
+        // Navigate to the contact list page (assuming '/users' is the list)
+        return <Navigate to="/users" />;
+    }
+
+    return (
+        <>
+            <IconButton
+                aria-label="Delete contact"
+                onClick={clickButton}
+                color="error"
+            >
+                <DeleteIcon />
+            </IconButton>
+
+            <Dialog open={open} onClose={handleRequestClose}>
+                <DialogTitle>Delete Contact</DialogTitle> {/* Corrected Title */}
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete this contact? This action is
+                        irreversible.
+                    </DialogContentText> {/* Corrected Text */}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleRequestClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleDelete} // Call the correct function
+                        color="error"
+                        variant="contained"
+                        autoFocus
+                    >
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
 }
-DeleteContacts.propTypes = {
-contactId: PropTypes.string.isRequired,
+
+// Updated PropType definition to match new component name
+DeleteContact.propTypes = {
+    contactId: PropTypes.string.isRequired,
 };
