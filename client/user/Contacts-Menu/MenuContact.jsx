@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     Paper,
     List,
@@ -10,35 +10,51 @@ import {
     IconButton,
     Typography,
     Divider,
+    CircularProgress, // Added for loading state feedback
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
-import DeleteContacts from "./DeleteContacts.jsx";
+
+// Renamed import to match corrected component name (assuming it's DeleteContact)
+import DeleteContact from "./DeleteContacts.jsx";
 import auth from "../../lib/auth-helper.js";
-import { list } from "../API JS/api-contacts.js"; 
+import { list } from "../API JS/api-contacts.js";
 import { useLocation, Navigate, Link } from "react-router-dom"; 
 
 export default function MenuContacts() {
     const location = useLocation();
     const [contacts, setContacts] = useState([]); 
     const [redirectToSignin, setRedirectToSignin] = useState(false);
-    
-    // Get JWT once
+    const [loading, setLoading] = useState(true); // New loading state
+
+    // Use isAuthenticated result directly
     const jwt = auth.isAuthenticated(); 
-    
-    // Define isAdmin based on the JWT
-    const isAdmin = jwt.user && jwt.user.role === "admin"; 
-    
-    // Get the current user's ID to check for ownership
     const currentUserId = jwt.user ? jwt.user._id : null;
-    
+    // Check if user is admin once
+    const isAdmin = jwt.user && jwt.user.role === "admin"; 
+
+    // Function to filter the deleted contact out of the list state
+    const removeContact = useCallback((deletedContactId) => {
+        // Create a new array that excludes the contact with the matching ID
+        setContacts(prevContacts => prevContacts.filter(
+            (contact) => contact._id !== deletedContactId
+        ));
+    }, []); // useCallback ensures this function doesn't change on every render
+
     useEffect(() => {
+        // Only proceed if authenticated
+        if (!jwt) {
+            setRedirectToSignin(true);
+            return;
+        }
+        
         const abortController = new AbortController();
         const signal = abortController.signal;
         
         list(signal).then((data) => { 
+            setLoading(false); // Data fetching finished
             if (data && data.error) {
-                if (data.error === "Unauthorized") {
+                if (data.error === "Unauthorized" || data.error === "User not authorized") {
                     setRedirectToSignin(true);
                 } else {
                     console.error("Failed to fetch contact list:", data.error);
@@ -48,12 +64,20 @@ export default function MenuContacts() {
             }
         });
         
+        // Cleanup function: Aborts the API call if the component unmounts
         return () => abortController.abort();
-    }, [jwt.token]); 
+        
+    // 💡 CRITICAL FIX: Empty dependency array fixes the AbortError on list loading
+    // The list of contacts should only be fetched once on component mount.
+    }, []); 
 
     if (redirectToSignin) {
         return <Navigate to="/signin" state={{ from: location.pathname }} replace />;
     }
+    
+    // Check for both loading and zero contacts to show the spinner/message
+    const showLoading = loading;
+    const noContactsFound = !loading && contacts.length === 0;
 
     return (
         <Paper
@@ -69,20 +93,25 @@ export default function MenuContacts() {
                 All Contacts
             </Typography>
             <List dense>
-                {contacts.length === 0 ? (
+                {showLoading && (
+                    <ListItem sx={{ justifyContent: 'center' }}>
+                        <CircularProgress />
+                    </ListItem>
+                )}
+                
+                {noContactsFound && (
                     <ListItem>
                         <ListItemText 
-                            primary={
-                                contacts.length === 0 ? "No contacts found or still loading..." : "Loading..."
-                            }
+                            primary={"No contacts found."}
                         />
                     </ListItem>
-                ) : (
+                )}
+                
+                {/* Render the list only if not loading and contacts exist */}
+                {!showLoading && contacts.length > 0 && (
                     contacts.map((contact, i) => {
-                        // Check if the current contact is owned by the logged-in user
+                        // isOwner is likely redundant for a contact list, but kept for logic clarity
                         const isOwner = currentUserId === contact._id;
-
-                        // NEW LOGIC: Show actions if user is Admin OR user is the Owner
                         const showActions = isAdmin || isOwner;
 
                         return (
@@ -98,7 +127,6 @@ export default function MenuContacts() {
                                         secondary={contact.email} 
                                     />
                                     
-                                    {/* APPLY THE NEW CONDITIONAL LOGIC */}
                                     {showActions && (
                                         <ListItemSecondaryAction>
                                             <Link to={`/contacts/edit/${contact._id}`}>
@@ -106,7 +134,10 @@ export default function MenuContacts() {
                                                     <EditIcon />
                                                 </IconButton>
                                             </Link>
-                                            <DeleteContacts contactId={contact._id} />
+                                            <DeleteContact 
+                                                contactId={contact._id} 
+                                                onRemove={removeContact} // Pass the optimized function
+                                            />
                                         </ListItemSecondaryAction>
                                     )}
                                 </ListItem>
