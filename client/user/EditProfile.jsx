@@ -9,7 +9,7 @@ import {
     Icon,
 } from "@mui/material";
 import auth from "../lib/auth-helper.js";
-import { read, update } from "./api-user.js";
+import { read, update } from "./API JS/api-user.js";
 import { Navigate, useParams } from "react-router-dom";
 
 export default function EditProfile() {

@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import DeleteUser from "./DeleteUser.jsx";
 import auth from "../lib/auth-helper.js";
-import { read } from "./api-user.js";
+import { read } from "./API JS/api-user.js";
 import { useLocation, Navigate, Link, useParams } from "react-router-dom";
 
 export default function Profile() {

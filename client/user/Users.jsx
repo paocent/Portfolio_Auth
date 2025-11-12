@@ -12,7 +12,7 @@ Typography,
 Link,
 } from "@mui/material";
 import ArrowForward from "@mui/icons-material/ArrowForward";
-import { list } from "./api-user.js";
+import { list } from "./API JS/api-user.js";
 import { Link as RouterLink } from "react-router-dom";
 export default function Users() {
 const [users, setUsers] = useState([]);

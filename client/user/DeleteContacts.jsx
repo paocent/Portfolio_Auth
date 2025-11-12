@@ -9,7 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import auth from "../lib/auth-helper.js";
-import { remove } from "./api-contacts.js";
+import { remove } from "./API JS/api-contacts.js";
 import { Navigate } from "react-router-dom";
 
 // Renamed component to singular for better naming convention
