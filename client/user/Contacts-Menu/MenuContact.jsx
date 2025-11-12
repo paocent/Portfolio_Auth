@@ -14,8 +14,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import DeleteContacts from "./DeleteContacts.jsx";
-import auth from "../lib/auth-helper.js";
-import { list } from "./API JS/api-contacts.js"; 
+import auth from "../../lib/auth-helper.js";
+import { list } from "../API JS/api-contacts.js"; 
 import { useLocation, Navigate, Link } from "react-router-dom"; 
 
 export default function MenuContacts() {

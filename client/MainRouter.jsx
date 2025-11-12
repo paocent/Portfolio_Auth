@@ -10,13 +10,13 @@ import Project from './src/project';
 import Layout from './components/Layout';
 import Services from './src/Services';
 import Home from './components/home';
-import Users from './user/Users';
+import Users from './user/Users-Menu/Users.jsx';
 import Signup from './user/Signup';
 import SignIn from './lib/SignIn';
-import Profile from './user/Profile';
+import Profile from './user/Profile-Menu/Profile.jsx';
 import PrivateRoute from './lib/PrivateRoute';
-import EditProfile from './user/EditProfile';
-import MenuContacts from './user/MenuContact.jsx';
+import EditProfile from './user/Profile-Menu/EditProfile.jsx';
+import MenuContacts from './user/Contacts-Menu/MenuContact.jsx';
 import Menu from './core/Menu';
 
 function MainRouter() {

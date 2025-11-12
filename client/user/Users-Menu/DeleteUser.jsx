@@ -8,8 +8,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import auth from "../lib/auth-helper.js";
-import { remove } from "./API JS/api-user.js";
+import auth from "../../lib/auth-helper.js";
+import { remove } from "../API JS/api-user.js";
 import { Navigate } from "react-router-dom";
 export default function DeleteUser({ userId }) {
 const [open, setOpen] = useState(false);
