@@ -16,7 +16,9 @@ import SignIn from './lib/SignIn';
 import Profile from './user/Profile';
 import PrivateRoute from './lib/PrivateRoute';
 import EditProfile from './user/EditProfile';
+import MenuContacts from './user/MenuContact.jsx';
 import Menu from './core/Menu';
+
 function MainRouter() {
   return (
     <div className="container">
@@ -35,6 +37,10 @@ function MainRouter() {
           <Route path="signup" element={<Signup />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="profile" element={<Profile />} />
+          <Route 
+                        path="contacts" 
+                        element={<PrivateRoute><MenuContacts /></PrivateRoute>} 
+                    />
 
           <Route
             path="user/edit/:userId"
