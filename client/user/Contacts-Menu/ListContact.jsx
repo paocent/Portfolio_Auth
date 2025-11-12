@@ -123,7 +123,8 @@ export default function MenuContacts() {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText 
-                                        primary={contact.name} 
+                                        // 💡 REVISED: Combine first and last name for display
+                                        primary={`${contact.firstName} ${contact.lastName}`} 
                                         secondary={contact.email} 
                                     />
                                     

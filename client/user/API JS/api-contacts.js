@@ -60,10 +60,11 @@ const list = async (signal) => {
     }
 };
 
-// --- REVISED: Now expects a generic 'id' parameter ---
+// --- FIX APPLIED HERE ---
 const read = async ({ id }, { t }, signal) => {
     try {
-        const response = await fetch(`${API_BASE}/${id}`, {
+        // 💡 FIX: Removed the extra slash after API_BASE
+        const response = await fetch(`${API_BASE}${id}`, { 
             method: "GET",
             signal,
             headers: {
@@ -78,10 +79,11 @@ const read = async ({ id }, { t }, signal) => {
     }
 };
 
-// --- REVISED: Now expects a generic 'id' parameter ---
+// --- FIX APPLIED HERE ---
 const update = async ({ id }, { t }, contacts) => {
     try {
-        const response = await fetch(`${API_BASE}/${id}`, {
+        // 💡 FIX: Removed the extra slash after API_BASE
+        const response = await fetch(`${API_BASE}${id}`, { 
             method: "PUT",
             headers: {
                 Accept: "application/json",

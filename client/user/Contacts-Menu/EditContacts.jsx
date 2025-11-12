@@ -9,54 +9,60 @@ import {
     Icon,
 } from "@mui/material";
 import auth from "../../lib/auth-helper.js";
-import { read, update } from "../API JS/api-user.js";
+import { read, update } from "../API JS/api-contacts.js";
 import { Navigate, useParams } from "react-router-dom";
 
-export default function EditProfile() {
-    const { userId } = useParams();
+export default function EditContact() {
+    const { contactId } = useParams(); 
+    
     const [values, setValues] = useState({
-        name: "",
-        password: "",
+        // 💡 NEW/REVISED: Added separate first and last name fields
+        firstName: "", 
+        lastName: "", 
         email: "",
         open: false,
         error: "",
-        NavigateToProfile: false,
+        redirectToContacts: false, 
     });
+    
     const jwt = auth.isAuthenticated();
 
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        read({ userId }, { t: jwt.token }, signal).then((data) => {
+        read({ id: contactId }, { t: jwt.token }, signal).then((data) => {
             if (data?.error) {
                 setValues((prev) => ({ ...prev, error: data.error }));
             } else {
                 setValues((prev) => ({
                     ...prev,
-                    name: data.name || "",
+                    // 💡 REVISED: Initialize with firstName and lastName from API data
+                    firstName: data.firstName || "",
+                    lastName: data.lastName || "",
                     email: data.email || "",
                 }));
             }
         });
 
         return () => abortController.abort();
-    }, [userId, jwt.token]);
+    }, [contactId]); 
 
     const clickSubmit = () => {
-        const user = {
-            name: values.name || undefined,
+        const contact = {
+            // 💡 REVISED: Send firstName, lastName, and email for update
+            firstName: values.firstName || undefined,
+            lastName: values.lastName || undefined,
             email: values.email || undefined,
-            password: values.password || undefined,
         };
-        update({ userId }, { t: jwt.token }, user).then((data) => {
+        
+        update({ id: contactId }, { t: jwt.token }, contact).then((data) => {
             if (data?.error) {
                 setValues((prev) => ({ ...prev, error: data.error }));
             } else {
                 setValues((prev) => ({
                     ...prev,
-                    userId: data._id,
-                    NavigateToProfile: true,
+                    redirectToContacts: true,
                 }));
             }
         });
@@ -66,8 +72,8 @@ export default function EditProfile() {
         setValues((prev) => ({ ...prev, [name]: event.target.value }));
     };
 
-    if (values.NavigateToProfile) {
-        return <Navigate to={`/user/${values.userId}`} />;
+    if (values.redirectToContacts) {
+        return <Navigate to={`/contacts`} />;
     }
 
     return (
@@ -82,17 +88,31 @@ export default function EditProfile() {
         >
             <CardContent>
                 <Typography variant="h6" sx={{ mt: 2, mb: 2, color: "text.primary" }}>
-                    Edit Profile
+                    Edit Contact
                 </Typography>
+                
+                {/* 💡 NEW: First Name Field */}
                 <TextField
-                    id="name"
-                    label="Name"
-                    value={values.name}
-                    onChange={handleChange("name")}
+                    id="firstName"
+                    label="First Name"
+                    value={values.firstName}
+                    onChange={handleChange("firstName")}
                     margin="normal"
                     sx={{ mx: 1, width: 300 }}
                 />
                 <br />
+                
+                {/* 💡 NEW: Last Name Field */}
+                <TextField
+                    id="lastName"
+                    label="Last Name"
+                    value={values.lastName}
+                    onChange={handleChange("lastName")}
+                    margin="normal"
+                    sx={{ mx: 1, width: 300 }}
+                />
+                <br />
+                
                 <TextField
                     id="email"
                     type="email"
@@ -103,16 +123,7 @@ export default function EditProfile() {
                     sx={{ mx: 1, width: 300 }}
                 />
                 <br />
-                <TextField
-                    id="password"
-                    type="password"
-                    label="Password"
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    margin="normal"
-                    sx={{ mx: 1, width: 300 }}
-                />
-                <br />
+                
                 {values.error && (
                     <Typography component="p" color="error" sx={{ mt: 1 }}>
                         <Icon color="error" sx={{ verticalAlign: "middle", mr: 1 }}>
