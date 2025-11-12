@@ -17,7 +17,7 @@ import Profile from './user/Profile-Menu/Profile.jsx';
 import PrivateRoute from './lib/PrivateRoute';
 import EditProfile from './user/Profile-Menu/EditProfile.jsx';
 // --- CONTACTS IMPORTS ---
-import MenuContacts from './user/Contacts-Menu/MenuContact.jsx';
+import MenuContacts from './user/Contacts-Menu/ListContact.jsx';
 // 💡 NEW: Assuming your edit contact component is named EditContact.jsx
 import EditContact from './user/Contacts-Menu/EditContacts.jsx';
 import Menu from './core/Menu';
