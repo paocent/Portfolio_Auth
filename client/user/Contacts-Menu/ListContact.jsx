@@ -21,7 +21,7 @@ export default function MenuContacts() {
 
     const jwt = auth.isAuthenticated(); 
     const currentUserId = jwt.user ? jwt.user._id : null;
-    const isAdmin = jwt.user && jwt.user.role === "admin"; 
+    const isAdmin = jwt.user && jwt.user.role === "admin"; // This is the variable we will use
 
     const removeContact = useCallback((deletedContactId) => {
         setContacts(prevContacts => prevContacts.filter(
@@ -38,7 +38,9 @@ export default function MenuContacts() {
         const abortController = new AbortController();
         const signal = abortController.signal;
         
-        // 💡 FIX: Pass the JWT token for authorization
+        // Handling API call issues observed in previous context
+        // Errors like "Server responded with non-JSON content or error status" (404/500)
+        // or AbortError can occur here
         list({ t: jwt.token }, signal).then((data) => { 
             setLoading(false);
             if (data && data.error) {
@@ -52,10 +54,9 @@ export default function MenuContacts() {
             }
         });
         
-        // Cleanup function: Aborts the API call if the component unmounts
         return () => abortController.abort();
         
-    }, [jwt.token]); // Dependency array includes token
+    }, [jwt.token]);
 
     if (redirectToSignin) {
         return <Navigate to="/signin" state={{ from: location.pathname }} replace />;
@@ -68,12 +69,15 @@ export default function MenuContacts() {
         <Paper elevation={4} sx={{ maxWidth: 600, mx: "auto", mt: 5, p: 3 }}>
             <Typography variant="h6" sx={{ mt: 3, mb: 2, color: "text.primary", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 All Contacts
-                {/* Link to the Create Contact form */}
-                <Link to="/contacts/new">
-                    <IconButton aria-label="Add" color="secondary">
-                        <AddBoxIcon />
-                    </IconButton>
-                </Link>
+                
+                {/* 🔑 FIX: Only show the Add button if the user is an Admin */}
+                {isAdmin && (
+                    <Link to="/contacts/new">
+                        <IconButton aria-label="Add" color="secondary">
+                            <AddBoxIcon />
+                        </IconButton>
+                    </Link>
+                )}
             </Typography>
             <List dense>
                 {showLoading && (
@@ -92,8 +96,8 @@ export default function MenuContacts() {
                 
                 {!showLoading && contacts.length > 0 && (
                     contacts.map((contact, i) => {
-                        // Allows admin or the owner (if contact includes an owner ID) to edit/delete
-                        // Assuming isOwner/isAdmin logic is determined by the specific requirements
+                        // This logic is for showing the Edit/Delete actions on each item.
+                        // It currently allows the owner (if contact._id matches currentUserId) or an admin to see the actions.
                         const showActions = isAdmin || currentUserId === contact._id; 
 
                         return (

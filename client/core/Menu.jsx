@@ -7,15 +7,18 @@ import Button from "@mui/material/Button";
 import auth from "../lib/auth-helper";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-// Helper function to set link color based on active path
+// Helper function to set link color based on active path (exact match)
 const isActive = (location, path) =>
     location.pathname === path ? "#ff4081" : "#ffffff";
 
-// Helper function for partial match (used for dynamic paths like /user/:userId)
+// Helper function for partial match (used for dynamic paths like /user/:userId or base links like /contacts)
 const isPartiallyActive = (location, path) => {
+    // Exact match takes precedence
     if (location.pathname === path) return "#ff4081";
-    // Checks if the current path starts with the base path, e.g., /user/ matches /user/123
-    return location.pathname.includes(path) ? "#ff4081" : "#ffffff";
+    
+    // Check if the current path starts with the base path
+    // We check against the full base path to avoid false positives (e.g., matching /contact-static for /contacts)
+    return location.pathname.startsWith(path) ? "#ff4081" : "#ffffff";
 };
 
 export default function Menu() {
@@ -61,11 +64,10 @@ export default function Menu() {
                 {/* --- Authenticated Links --- */}
                 {isAuthenticated && (
                     <>
-                        {/* 1. Profile Link (Uses partial match for /user/edit/ or /user/:userId) */}
+                        {/* 1. Profile Link (Correctly uses the user ID and partial match) */}
                         <Link to={`/user/${userId}`}>
                             <Button
                                 sx={{
-                                    // Using isPartiallyActive to highlight profile for /user/edit/:userId too
                                     color: isPartiallyActive(location, `/user/${userId}`),
                                 }}
                             >
@@ -73,20 +75,21 @@ export default function Menu() {
                             </Button>
                         </Link>
 
-                        {/* 2. Contacts Link */}
+                        {/* 2. Contacts Link (Links to /contacts list view) */}
                         <Link to="/contacts">
                             <Button 
+                                // Uses isPartiallyActive to highlight for /contacts/new or /contacts/edit/:contactId
                                 sx={{ color: isPartiallyActive(location, "/contacts") }}
                             >
                                 Contacts
                             </Button>
                         </Link>
 
-                        {/* 3. 💡 NEW: Education Link */}
+                        {/* 3. Education Link (Links to /education-list view) */}
                         <Link to="/education-list"> 
                             <Button 
-                                // 💡 FIX: Check for the new path
-                                sx={{ color: isPartiallyActive(location, "/education-list") }} 
+                                // Highlights if path starts with /education-list or /education/edit/
+                                sx={{ color: isPartiallyActive(location, "/education") }} 
                             >
                                 Education
                             </Button>
