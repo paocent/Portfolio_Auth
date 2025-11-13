@@ -1,3 +1,101 @@
+/*
+GENERAL.CSS - Stylesheet overview and documentation
+Author: Paolo Andrei Adame
+Last updated: September 20 2025
+
+Purpose
+-------
+This stylesheet contains layout and component styles used across the portfolio application.
+It defines general page containers, content areas, cards for projects and services, image
+styles, and a contact-area block. Each section is implemented as a set of class selectors
+so they can be applied to semantic HTML elements.
+
+Organization
+------------
+- .container: Generic centered wrapper for content blocks.
+- .main-content: Primary content area used for top-aligned fixed content (e.g., hero/header area).
+- .education-body, .about-body: Typographic body text containers with spacing & line-height.
+- .header: Large typographic heading style for page titles.
+- .about-image: Circular profile or avatar image styling.
+- .project-main, .project-card, .project-image: Grid/list of project cards with hover effects.
+- .services-section, .services-container, .service-card, .service-image: Services area using a responsive grid and card UI.
+- .contact-container, .contact-form: Contact page layout and basic form controls.
+
+Usage notes & expected HTML structure
+------------------------------------
+- .container
+    - Use as a generic wrapper inside page sections. Provides central alignment, padding,
+        rounded corners and soft shadow. Text color is set for dark backgrounds.
+    - Example: <div class="container">...</div>
+
+- .main-content
+    - Intended for a fixed, centered content panel at the top of the viewport. Because it is
+        position: fixed and centered with transform, avoid using it for very long content unless
+        max-height and overflow are explicitly managed.
+    - If used alongside other fixed blocks (e.g., .contact-container), ensure only one is fixed
+        at a time or adjust top values to avoid overlap.
+
+- Text bodies (.education-body, .about-body)
+    - Provide increased font-size and line-height for readability. Use for paragraphs and lists.
+
+- .header
+    - High-visibility page/section title. Uses heavier font-weight and a colored text shadow.
+    - Suitable for top-of-page headings; do not nest within extremely small containers.
+
+- .about-image
+    - Circular image meant for avatars/profile pictures. Constrain source images to square or
+        allow object-fit on the element to avoid distortion.
+
+- Project & Service cards (.project-main, .project-card, .project-image, .services-container, .service-card, .service-image)
+    - Cards use a subtle shadow and transform transitions on hover for interactive feel.
+    - .project-main uses flex with wrapping; .services-container uses CSS Grid with
+        repeat(auto-fit, minmax(...)) for responsive columns.
+    - Each card expects an image, title and short description. Keep text concise to avoid
+        overflow; consider limiting text height or using ellipsis for long content.
+
+- .contact-container & .contact-form
+    - Contact container is also position: fixed and centered, similar to .main-content.
+        This is suitable for short contact panels or modals; for full-page forms consider a
+        non-fixed layout or remove the fixed positioning.
+    - .contact-form is a vertical form stack. Inputs and textarea receive consistent padding,
+        borders and radius; button uses a primary green background for submit actions.
+
+Accessibility & Responsiveness
+------------------------------
+- Contrast: Many components use dark backgrounds with light text (#fffafa / light grays).
+    Verify color contrast ratios meet WCAG standards, especially for body text and small labels.
+- Focus states: Ensure keyboard users can see focus rings on interactive elements (links,
+    buttons, form controls). Consider adding :focus outlines or visible focus styles.
+- Fixed positioning: Fixed top panels (.main-content, .contact-container) can obscure
+    content on small screens. Either:
+        - Provide toggles that remove fixed behavior on narrow viewports, or
+        - Add appropriate top padding/margins to the page content to prevent overlap.
+- Images: Use modern responsive techniques (srcset, sizes, or object-fit) to optimize loading
+    and ensure no layout shifts.
+
+Customizability & Suggested Improvements
+----------------------------------------
+- Extract color and spacing values into CSS variables (e.g., --bg-card, --text-muted,
+    --primary-accent, --gap-lg) to simplify theme changes.
+- Consider adding max-height and overflow:auto to fixed panels when content may exceed the
+    viewport height; add smooth scrolling within the panel if necessary.
+- Add media queries to adjust:
+        - .main-content and .contact-container positioning (switch to static/relative on small screens)
+        - card widths and grid gaps for narrow viewports
+- Add utility helper classes (e.g., .sr-only for screen-reader-only text, .center, .muted)
+    to reduce duplication in markup.
+
+Performance & Maintenance
+-------------------------
+- Group and compress repetitive shadow declarations into variables or mixins (if using a preprocessor).
+- Keep images optimized and sized for the target card dimensions (200px / 300px as used here).
+- Document any required markup patterns (e.g., structure of a project card) in the project's README
+    so that other contributors can implement consistent components.
+
+Change Log
+----------
+- Keep a brief change log here for major layout or naming changes to assist future maintainers.
+*/
 /*  
 general.css
 Paolo Andrei Adame
