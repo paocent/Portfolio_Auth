@@ -8,14 +8,40 @@ import auth from "../../lib/auth-helper.js";
 import { create } from "../API JS/api-education.js";
 import { Navigate } from "react-router-dom";
 
+// Helper function to extract and format the validation error
+// This function is key to pulling the Mongoose message out of the error object
+const formatValidationError = (errorData) => {
+    // Check if the structure contains Mongoose validation details
+    if (errorData?.errors) {
+        // Check specifically for the email error message
+        if (errorData.errors.email && errorData.errors.email.message) {
+            return errorData.errors.email.message; // e.g., "Please fill a valid email address"
+        }
+        
+        // If there are other errors (like the password one you commented out), 
+        // return the main validation message
+        return errorData._message || "Validation failed with missing data.";
+        
+    } else if (typeof errorData === 'string') {
+        // Handle simpler string errors
+        return errorData;
+    }
+    
+    // Default fallback message
+    return "Server failed to respond with API data. Status: 400";
+};
+
+
 export default function NewEducation() {
     const [values, setValues] = useState({
-        institution: "",
-        degree: "",
-        year: "", // Stored as a string from the text field
+        title: "",
+        firstName: "",
+        lastName: "", 
+        email: "",
         error: "",
         redirectToEducation: false,
     });
+    // ... (rest of the component logic for handleChange, clickSubmit, and rendering)
 
     const jwt = auth.isAuthenticated();
 
@@ -25,16 +51,18 @@ export default function NewEducation() {
 
     const clickSubmit = () => {
         const education = {
-            institution: values.institution || undefined,
-            degree: values.degree || undefined,
-            // Ensure year is saved as a number if your schema requires it, otherwise string is fine.
-            year: values.year || undefined, 
+            title: values.title || undefined,
+            firstName: values.firstName || undefined,
+            lastName: values.lastName || undefined, 
+            email: values.email || undefined,
         };
 
         // Call the API create function
         create(education, { t: jwt.token }).then((data) => {
             if (data?.error) {
-                setValues((prev) => ({ ...prev, error: data.error }));
+                // ✅ Use the helper function to format the error object
+                const clientError = formatValidationError(data.error);
+                setValues((prev) => ({ ...prev, error: clientError }));
             } else {
                 setValues((prev) => ({
                     ...prev,
@@ -46,7 +74,6 @@ export default function NewEducation() {
     };
 
     if (values.redirectToEducation) {
-        // Redirect to the education list view after successful creation
         return <Navigate to={`/education-list`} />; 
     }
 
@@ -66,31 +93,40 @@ export default function NewEducation() {
                 </Typography>
                 
                 <TextField
-                    id="institution"
-                    label="Institution Name"
-                    value={values.institution}
-                    onChange={handleChange("institution")}
+                    id="title"
+                    label="Title/Program Name"
+                    value={values.title}
+                    onChange={handleChange("title")}
                     margin="normal"
                     sx={{ mx: 1, width: 300 }}
                 />
                 <br />
                 
                 <TextField
-                    id="degree"
-                    label="Degree/Qualification"
-                    value={values.degree}
-                    onChange={handleChange("degree")}
+                    id="firstName"
+                    label="First Name"
+                    value={values.firstName}
+                    onChange={handleChange("firstName")}
                     margin="normal"
                     sx={{ mx: 1, width: 300 }}
                 />
                 <br />
                 
                 <TextField
-                    id="year"
-                    label="Year Completed"
-                    type="number" // Use number type for a better input experience
-                    value={values.year}
-                    onChange={handleChange("year")}
+                    id="lastName"
+                    label="Last Name"
+                    value={values.lastName}
+                    onChange={handleChange("lastName")}
+                    margin="normal"
+                    sx={{ mx: 1, width: 300 }}
+                />
+                <br />
+                
+                <TextField
+                    id="email"
+                    label="Email"
+                    value={values.email}
+                    onChange={handleChange("email")}
                     margin="normal"
                     sx={{ mx: 1, width: 300 }}
                 />
@@ -101,7 +137,7 @@ export default function NewEducation() {
                         <Icon color="error" sx={{ verticalAlign: "middle", mr: 1 }}>
                             error
                         </Icon>
-                        {values.error}
+                        {values.error} {/* This is where the Mongoose email error appears */}
                     </Typography>
                 )}
             </CardContent>

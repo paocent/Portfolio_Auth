@@ -1,14 +1,9 @@
 import mongoose from 'mongoose'
 import crypto from 'crypto'
-import { title } from 'process';
-import pkg from 'lodash';
-const { first } = pkg;
-
-
-// Utility function (if needed for hashing later, but not for a simple contact)
-// const { createHmac, randomBytes } = await import('crypto')
+// Removed unused imports
 
 const educationSchema = new mongoose.Schema({
+    // Contact/User Fields
     title: {
         type: String,
         trim: true,
@@ -33,62 +28,72 @@ const educationSchema = new mongoose.Schema({
         required: 'Email is required'
     },
     
-    // Adding a general created date field is good practice for contacts
+    // General Fields (Fixed duplicate 'created' definition)
     created: {
         type: Date,
         default: Date.now
     },
-    created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  },
-  hashed_password: {
-    type: String,
-    required: 'Password is required'
-  },
-  salt: String
+    updated: {
+        type: Date,
+        default: Date.now
+    },
+    
+    // 🛑 COMMENTED OUT: Authentication Fields (These require a password)
+    /*
+    hashed_password: {
+        type: String,
+        required: 'Password is required'
+    },
+    salt: String
+    */
 });
+
+// 🛑 COMMENTED OUT: Virtual Field 'password' (This is what triggers the hashed_password requirement)
+/*
 educationSchema.virtual('password')
-  .set(function(password) {
-    this._password = password;
-    this.salt = this.makeSalt();
-    this.hashed_password = this.encryptPassword(password)
-    //this.hashed_password = password;
-  })
-  .get(function() {
-    return this._password;
-  });
+    .set(function(password) {
+        this._password = password;
+        this.salt = this.makeSalt();
+        this.hashed_password = this.encryptPassword(password)
+    })
+    .get(function() {
+        return this._password;
+    });
+*/
+
+// 🛑 COMMENTED OUT: Validation (This enforces the password requirement)
+/*
 educationSchema.path('hashed_password').validate(function(v) {
-  if (this._password && this._password.length < 6) {
-    this.invalidate('password', 'Password must be at least 6 characters.');
-  }
-  if (this.isNew && !this._password) {
-    this.invalidate('password', 'Password is required');
-  }
-}, null);
-educationSchema.methods = {
-  authenticate: function(plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password
-  },
-  encryptPassword: function(password) {
-    if (!password) return ''
-    try {
-      return crypto
-        .createHmac('sha1', this.salt)
-        .update(password)
-        .digest('hex')
-    } catch (err) {
-      return ''
+    if (this._password && this._password.length < 6) {
+        this.invalidate('password', 'Password must be at least 6 characters.');
     }
-  },
-  makeSalt: function() {
-    return Math.round((new Date().valueOf() * Math.random())) + ''
-  }
+    if (this.isNew && !this._password) {
+        this.invalidate('password', 'Password is required');
+    }
+}, null);
+*/
+
+// 🛑 COMMENTED OUT: Authentication Methods (These support the virtual field)
+/*
+educationSchema.methods = {
+    authenticate: function(plainText) {
+        return this.encryptPassword(plainText) === this.hashed_password
+    },
+    encryptPassword: function(password) {
+        if (!password) return ''
+        try {
+            return crypto
+                .createHmac('sha1', this.salt)
+                .update(password)
+                .digest('hex')
+        } catch (err) {
+            return ''
+        }
+    },
+    makeSalt: function() {
+        return Math.round((new Date().valueOf() * Math.random())) + ''
+    }
 }
-//module.exports = mongoose.model('User', UserSchema);
+*/
 
 export default mongoose.model('Education', educationSchema);

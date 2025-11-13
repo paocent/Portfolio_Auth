@@ -89,6 +89,11 @@ function MainRouter() {
                 path="education/edit/:educationId"
                 element={<PrivateRoute><EditEducation /></PrivateRoute>}
             />
+            {/* 💡 FIX: ADD THE NEW CONTACTS CREATION ROUTE */}
+            <Route 
+                path="education/new" 
+                element={<PrivateRoute><NewEducation /></PrivateRoute>} 
+            />
             
           {/* 3. User Profile Routes */}
           {/* Using /user/:userId and /user/edit/:userId is best practice for clarity */}
