@@ -102,9 +102,9 @@ export default function MenuEducation() {
                                     <ListItemAvatar>
                                         <Avatar><SchoolIcon /></Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText 
-                                        primary={item.institution} 
-                                        secondary={`${item.degree} (${item.year})`} 
+                                    <ListItemText
+                                        primary={`Title: ${item.title}`}
+                                        secondary={`${item.lastName}, ${item.firstName} - ${item.email}`}
                                     />
                                     
                                     {showActions && (
