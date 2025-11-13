@@ -36,57 +36,65 @@ const contactsSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  },
-  hashed_password: {
-    type: String,
-    required: 'Password is required'
-  },
-  salt: String
+    // ⚠️ FIXED: The duplicate 'created' field is now commented out.
+    // created: { 
+    // type: Date,
+    // default: Date.now
+    // },
+    updated: {
+        type: Date,
+        default: Date.now
+    },
+    // 🛑 COMMENTED OUT: Authentication fields causing the Status 500 error
+    // hashed_password: {
+    //   type: String,
+    //   required: 'Password is required'
+    // },
+    // salt: String
 });
-contactsSchema.virtual('password')
-  .set(function(password) {
-    this._password = password;
-    this.salt = this.makeSalt();
-    this.hashed_password = this.encryptPassword(password)
-    //this.hashed_password = password;
-  })
-  .get(function() {
-    return this._password;
-  });
-contactsSchema.path('hashed_password').validate(function(v) {
-  if (this._password && this._password.length < 6) {
-    this.invalidate('password', 'Password must be at least 6 characters.');
-  }
-  if (this.isNew && !this._password) {
-    this.invalidate('password', 'Password is required');
-  }
-}, null);
-contactsSchema.methods = {
-  authenticate: function(plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password
-  },
-  encryptPassword: function(password) {
-    if (!password) return ''
-    try {
-      return crypto
-        .createHmac('sha1', this.salt)
-        .update(password)
-        .digest('hex')
-    } catch (err) {
-      return ''
-    }
-  },
-  makeSalt: function() {
-    return Math.round((new Date().valueOf() * Math.random())) + ''
-  }
-}
+
+// 🛑 COMMENTED OUT: Virtual property logic causing the Status 500 error
+// contactsSchema.virtual('password')
+//   .set(function(password) {
+//     this._password = password;
+//     this.salt = this.makeSalt();
+//     this.hashed_password = this.encryptPassword(password)
+//     //this.hashed_password = password;
+//   })
+//   .get(function() {
+//     return this._password;
+//   });
+
+// 🛑 COMMENTED OUT: Validation logic causing the Status 500 error
+// contactsSchema.path('hashed_password').validate(function(v) {
+//   if (this._password && this._password.length < 6) {
+//     this.invalidate('password', 'Password must be at least 6 characters.');
+//   }
+//   if (this.isNew && !this._password) {
+//     this.invalidate('password', 'Password is required');
+//   }
+// }, null);
+
+// 🛑 COMMENTED OUT: Methods causing the Status 500 error
+// contactsSchema.methods = {
+//   authenticate: function(plainText) {
+//     return this.encryptPassword(plainText) === this.hashed_password
+//   },
+//   encryptPassword: function(password) {
+//     if (!password) return ''
+//     try {
+//       return crypto
+//         .createHmac('sha1', this.salt)
+//         .update(password)
+//         .digest('hex')
+//     } catch (err) {
+//       return ''
+//     }
+//   },
+//   makeSalt: function() {
+//     return Math.round((new Date().valueOf() * Math.random())) + ''
+//   }
+// }
 //module.exports = mongoose.model('User', UserSchema);
 
 export default mongoose.model('Contact', contactsSchema);

@@ -18,6 +18,8 @@ import SignIn from './lib/SignIn';
 import Profile from './user/Profile-Menu/Profile.jsx';
 import PrivateRoute from './lib/PrivateRoute';
 import EditProfile from './user/Profile-Menu/EditProfile.jsx';
+import NewContacts from './user/Contacts-Menu/NewContacts.jsx';
+import NewEducation from './user/Education-Menu/NewEducation.jsx';
 import Menu from './core/Menu';
 
 // --- FEATURE IMPORTS ---
@@ -67,6 +69,12 @@ function MainRouter() {
             path="contacts/edit/:contactId"
             element={<PrivateRoute><EditContact /></PrivateRoute>}
           />
+
+{/* 💡 FIX: ADD THE NEW CONTACTS CREATION ROUTE */}
+            <Route 
+                path="contacts/new" 
+                element={<PrivateRoute><NewContacts /></PrivateRoute>} 
+            />
 
             {/* 2. EDUCATION Routes (CRUD) */}
             {/* 💡 NEW: Education List View (e.g., /education/list or /education-crud) */}
