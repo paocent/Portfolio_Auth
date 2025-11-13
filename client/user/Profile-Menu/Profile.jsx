@@ -42,6 +42,10 @@ export default function Profile() {
         return <Navigate to="/signin" state={{ from: location.pathname }} replace />;
     }
 
+    // Safely determine the role for display
+    const userRole = user.role ? user.role.toUpperCase() : 'N/A';
+    const primaryText = user.name ? user.name : 'Loading...';
+
     return (
         <Paper
             elevation={4}
@@ -62,7 +66,7 @@ export default function Profile() {
                             <PersonIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={user.name} secondary={user.email} />
+                    <ListItemText primary={primaryText} secondary={user.email} />
                     {auth.isAuthenticated().user &&
                         auth.isAuthenticated().user._id === user._id && (
                             <ListItemSecondaryAction>
@@ -76,6 +80,17 @@ export default function Profile() {
                         )}
                 </ListItem>
                 <Divider />
+                
+                {/* 💡 NEW: Display User Role */}
+                <ListItem>
+                    <ListItemText
+                        primary={`User Role: ${userRole}`}
+                        // Optional: Use a subtitle for emphasis or context
+                        secondary={userRole === 'ADMIN' ? "Authorized to manage contacts and users." : "Standard user privileges."}
+                    />
+                </ListItem>
+                <Divider />
+                
                 <ListItem>
                     <ListItemText
                         primary={

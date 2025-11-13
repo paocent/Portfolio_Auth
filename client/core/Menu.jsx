@@ -7,12 +7,22 @@ import Button from "@mui/material/Button";
 import auth from "../lib/auth-helper";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
+// Helper function to set link color based on active path
 const isActive = (location, path) =>
     location.pathname === path ? "#ff4081" : "#ffffff";
+
+// Helper function for partial match (used for dynamic paths like /user/:userId)
+const isPartiallyActive = (location, path) => {
+    if (location.pathname === path) return "#ff4081";
+    // Checks if the current path starts with the base path, e.g., /user/ matches /user/123
+    return location.pathname.includes(path) ? "#ff4081" : "#ffffff";
+};
 
 export default function Menu() {
     const navigate = useNavigate();
     const location = useLocation();
+    const isAuthenticated = auth.isAuthenticated();
+    const userId = isAuthenticated ? isAuthenticated.user._id : null;
 
     return (
         <AppBar position="static">
@@ -21,6 +31,7 @@ export default function Menu() {
                     Profile App
                 </Typography>
 
+                {/* --- Public Links --- */}
                 <Link to="/">
                     <IconButton aria-label="Home" sx={{ color: isActive(location, "/") }}>
                         <HomeIcon />
@@ -31,7 +42,7 @@ export default function Menu() {
                     <Button sx={{ color: isActive(location, "/users") }}>Users</Button>
                 </Link>
 
-                {!auth.isAuthenticated() && (
+                {!isAuthenticated && (
                     <>
                         <Link to="/signup">
                             <Button sx={{ color: isActive(location, "/signup") }}>
@@ -47,21 +58,41 @@ export default function Menu() {
                     </>
                 )}
 
-                {auth.isAuthenticated() && (
+                {/* --- Authenticated Links --- */}
+                {isAuthenticated && (
                     <>
-                        <Link to={`/user/${auth.isAuthenticated().user._id}`}>
+                        {/* 1. Profile Link (Uses partial match for /user/edit/ or /user/:userId) */}
+                        <Link to={`/user/${userId}`}>
                             <Button
                                 sx={{
-                                    color: isActive(
-                                        location,
-                                        `/user/${auth.isAuthenticated().user._id}`
-                                    ),
+                                    // Using isPartiallyActive to highlight profile for /user/edit/:userId too
+                                    color: isPartiallyActive(location, `/user/${userId}`),
                                 }}
                             >
                                 My Profile
                             </Button>
                         </Link>
 
+                        {/* 2. Contacts Link */}
+                        <Link to="/contacts">
+                            <Button 
+                                sx={{ color: isPartiallyActive(location, "/contacts") }}
+                            >
+                                Contacts
+                            </Button>
+                        </Link>
+
+                        {/* 3. 💡 NEW: Education Link */}
+                        <Link to="/education-list"> 
+                            <Button 
+                                // 💡 FIX: Check for the new path
+                                sx={{ color: isPartiallyActive(location, "/education-list") }} 
+                            >
+                                Education
+                            </Button>
+                        </Link>
+                        
+                        {/* 4. Sign Out */}
                         <Button
                             sx={{ color: "#ffffff" }}
                             onClick={() => {
@@ -70,17 +101,7 @@ export default function Menu() {
                         >
                             Sign out
                         </Button>
-
-                        {/* this is for contacts */}
-                        <Link to="/contacts">
-                            <Button sx={{ color: isActive(location, "/contacts") }}>
-                                Contacts
-                            </Button>
-                        </Link>
-
                     </>
-
-                    
                 )}
             </Toolbar>
         </AppBar>
