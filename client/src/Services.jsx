@@ -1,5 +1,5 @@
 import React from 'react';
-import './general.css';
+import './src-CSS/general.css';
 import webdev from './assets/WebDev.jpg';
 import uiux from './assets/UI.jpg';
 import seo from './assets/SEO-image1.jpg';

@@ -1,5 +1,5 @@
 import React from 'react';
-import './general.css';
+import './src-CSS/general.css';
 import EMS from './assets/EmployeeManagementSystem.png';
 import BookHive from './assets/BookHive.png';
 import GoldCorner from './assets/GoldCorner.png';

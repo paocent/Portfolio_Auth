@@ -1,4 +1,4 @@
-import './general.css'
+import '../src/src-CSS/general.css';
 import React from 'react';
 import photo from './assets/Paolo.jpg'
 import resume from './assets/Resume.pdf'
