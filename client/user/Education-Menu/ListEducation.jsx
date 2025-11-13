@@ -70,7 +70,7 @@ export default function MenuEducation() {
     return (
         <Paper elevation={4} sx={{ maxWidth: 600, mx: "auto", mt: 5, p: 3, }}>
             <Typography variant="h6" sx={{ mt: 3, mb: 2, color: "text.primary", display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                My Education
+                Education
                 
                 {/* ✅ SOLUTION: The New Button is conditionally rendered here */}
                 {isAdmin && (

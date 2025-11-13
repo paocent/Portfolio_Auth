@@ -14,4 +14,10 @@ return auth.isAuthenticated() ? (
     />
 );
 };
+
+
+
+
+
+
 export default PrivateRoute;
