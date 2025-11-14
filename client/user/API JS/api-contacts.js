@@ -5,33 +5,48 @@ const API_BASE = "/api/contacts/";
 // --- Helper Functions (Ensuring robust response handling) ---
 
 const handleResponse = async (response) => {
-    const contentType = response.headers.get("content-type");
-    
-    if (!response.ok || !contentType || !contentType.includes("application/json")) {
-        const errorText = await response.text();
-        console.error("Server responded with non-JSON content or error status:", errorText);
+    // 1. Check if the response status is NOT OK (e.g., 400, 500)
+    if (!response.ok) {
+        // Read the error text/HTML from the server, but don't try to parse it as JSON.
+        const errorText = await response.text(); 
         
-        throw new Error(`Server failed to respond with API data. Status: ${response.status}`);
+        // Log the full response content for debugging
+        console.error(`Server responded with error status: ${response.status}`, errorText);
+        
+        // Throw a simplified error. This prevents the "Invalid status code" JSON parsing error.
+        throw new Error(`API call failed with status: ${response.status}. Details: ${errorText.substring(0, 100)}...`);
     }
 
-    try {
-        const data = await response.json();
-        if (data.error) {
-            throw data;
+    // 2. If the response IS OK (200, 201, 204), check content type.
+    const contentType = response.headers.get("content-type");
+    
+    // Check if the response has content AND is JSON
+    if (contentType && contentType.includes("application/json")) {
+        // Try to parse JSON for successful, JSON-containing responses
+        try {
+            const data = await response.json();
+            if (data.error) {
+                // Throw if the server successfully returns JSON but includes an error key
+                throw new Error(data.error);
+            }
+            return data;
+        } catch (err) {
+            console.error("Failed to parse successful response JSON:", err);
+            throw new Error("Failed to process server response.");
         }
-        return data;
-    } catch (err) {
-        console.error("Failed to parse response JSON:", err);
-        throw err;
     }
+    
+    // 3. Handle successful responses that are not JSON (like a 204 No Content for a successful delete).
+    return {}; 
 };
 
 const handleError = (err) => {
     console.error("API call failed:", err);
+    // Return the error message from the thrown Error object
     return { error: err.message || "An unknown network error occurred" }; 
 };
 
-// --- CRUD Functions ---
+// --- CRUD Functions (These remain largely unchanged as they call the helper) ---
 
 const create = async (contact, { t }) => {
     try {
@@ -50,7 +65,6 @@ const create = async (contact, { t }) => {
     }
 };
 
-// 💡 REVISED: List now accepts credentials and sends the token
 const list = async (credentials, signal) => { 
     try {
         const response = await fetch(API_BASE, {
@@ -58,7 +72,7 @@ const list = async (credentials, signal) => {
             signal,
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${credentials.t}`, // <-- Token added here
+                'Authorization': `Bearer ${credentials.t}`,
             },
         });
         return await handleResponse(response);
@@ -102,7 +116,6 @@ const update = async ({ contactId }, { t }, contact) => {
 
 const remove = async ({ contactId }, { t }) => {
     try {
-        // Correct path construction: API_BASE + ID
         const response = await fetch(`${API_BASE}${contactId}`, { 
             method: "DELETE",
             headers: {

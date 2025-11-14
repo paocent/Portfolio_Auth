@@ -10,14 +10,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-// 💡 Path adjustment confirmed from previous steps
 import auth from "../../lib/auth-helper.js"; 
-import { remove } from "../API JS/api-contacts.js"; // Note: This uses api-contacts.js
+import { remove } from "../API JS/api-contacts.js"; 
 
-// 💡 Accepts the onRemove function from the parent list component
 export default function DeleteContact({ contactId, onRemove }) {
     const [open, setOpen] = useState(false);
-    // ❌ Removed 'redirect' state and <Navigate> hook
     const jwt = auth.isAuthenticated();
 
     const clickButton = () => {
@@ -25,13 +22,15 @@ export default function DeleteContact({ contactId, onRemove }) {
     };
 
     const deleteContact = () => {
-        remove({ id: contactId }, { t: jwt.token }).then((data) => {
+        // 🛑 FIX HERE: Change { id: contactId } to { contactId: contactId } 
+        // to match the expected parameter name in api-contacts.js
+        remove({ contactId: contactId }, { t: jwt.token }).then((data) => {
             if (data?.error) {
-                console.error(data.error);
+                // Now that the ID is correct, this will log proper errors if any occur
+                console.error("Delete Error:", data.error);
             } else {
-                // 💡 Call the onRemove function passed from the parent
                 onRemove(contactId);
-                setOpen(false); // Close the dialog after deletion
+                setOpen(false); 
             }
         });
     };
@@ -39,8 +38,6 @@ export default function DeleteContact({ contactId, onRemove }) {
     const handleRequestClose = () => {
         setOpen(false);
     };
-
-    // ❌ Removed conditional redirect check
 
     return (
         <>
@@ -79,5 +76,5 @@ export default function DeleteContact({ contactId, onRemove }) {
 
 DeleteContact.propTypes = {
     contactId: PropTypes.string.isRequired,
-    onRemove: PropTypes.func.isRequired, // 💡 Must include the new prop
+    onRemove: PropTypes.func.isRequired,
 };

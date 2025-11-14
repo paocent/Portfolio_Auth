@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js'
 import contactsRoutes from './routes/contacts.routes.js'  
 import educationRoutes from './routes/education.routes.js'
 import projectsRoutes from './routes/project.routes.js'
+import contactForms from './routes/contactsForm.routes.js' // Import contact form routes
 
 
 // Fix 1: Removed duplicate 'import cookieParser from 'cookie-parser''
@@ -44,6 +45,7 @@ app.use('/', contactsRoutes)
 app.use('/', authRoutes)
 app.use('/', educationRoutes)
 app.use('/', projectsRoutes)
+app.use('/', contactForms) // Add contact form routes
 
 
 // --- 4. Error Handling Middleware (MUST be last) ---

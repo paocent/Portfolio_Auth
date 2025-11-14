@@ -25,7 +25,7 @@ const create = async (req, res) => {
 }
 
 // 🎯 REVISION: Updated .select() to include firstName and lastName 
-//               while excluding sensitive fields.
+//               while excluding sensitive fields.
 const list = async (req, res) => { 
     try {
         let contacts = await Contacts.find({}) // Using singular 'Contacts' model
@@ -43,18 +43,20 @@ const list = async (req, res) => {
     }
 }
 
+// contacts.controller.js
 const contactsByID = async (req, res, next, id) => {
     try {
-        let contact = await Contacts.findById(id) // Renamed to singular 'contact'
+        let contact = await Contacts.findById(id) 
         if (!contact)
-            return res.status('400').json({
-                error: "Contact not found" // Singularized error message
+            return res.status(400).json({ 
+                error: "Contact not found" // This is the error for a valid ID but no matching contact
             })
-        req.contact = contact // Storing as req.contact for consistency
+        req.contact = contact
         next()
     } catch (err) {
-        return res.status('400').json({
-            error: "Could not retrieve contact" // Singularized error message
+        // THIS IS LIKELY THE ERROR YOU ARE SEEING
+        return res.status(400).json({ 
+            error: "Could not retrieve contact" // This is the error for an invalid ID format or DB connection issue
         })
     }
 }
@@ -112,7 +114,7 @@ const removeAll = async (req, res) => {
 // Exporting with the original function names for router compatibility
 export default { 
     create, 
-    contactsByID, // Note: This function name might be better as contactByID for singular param, but keep for router compatibility
+    contactsByID, 
     read, 
     list, 
     remove, 
