@@ -1,6 +1,6 @@
 // src/user/API JS/api-contacts.js
 
-const API_BASE = "/api/contacts/"; 
+const API_BASE = `${import.meta.env.VITE_API_URL}/api/contacts/`;
 
 // --- Helper Functions (Ensuring robust response handling) ---
 
