@@ -1,6 +1,6 @@
 // src/user/API JS/api-education.js
 
-const API_BASE = `${import.meta.env.VITE_API_URL}/api/contacts/`;
+const API_BASE = `${import.meta.env.VITE_API_URL}/api/education/`;
 
 // --- Helper Functions (Ensuring robust response handling) ---
 
