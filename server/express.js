@@ -38,13 +38,11 @@ app.use(helmet())
 // ⭐ CRITICAL FIX: Configured CORS Middleware ⭐
 // ------------------------------------------------------------------
 
-// You MUST set this to the exact public URL of your Frontend Static Site on Render.
-// If your frontend is named "portfolio-frontend", the URL would be: 
-// 'https://portfolio-frontend.onrender.com'
-const FRONTEND_URL = 'https://[YOUR-FRONTEND-STATIC-SITE-NAME].onrender.com'; 
+// 1. Define the exact URL of your Frontend Static Site (The Fix!)
+const FRONTEND_URL = 'https://portfolio-auth-frontend-proj.onrender.com'; 
 
 app.use(cors({
-  origin: FRONTEND_URL,       // Allows ONLY requests from your frontend URL
+  origin: FRONTEND_URL,       // Allows ONLY requests from your specific frontend URL
   credentials: true,          // ESSENTIAL for sending cookies/auth tokens
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
