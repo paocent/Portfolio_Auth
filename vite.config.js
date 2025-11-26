@@ -6,7 +6,7 @@ const {PORT = 3000} = process.env;
 export default defineConfig({
   root: './client', 
   plugins: [react()],
-  base:process.env.VITE_BASE_PATH || '/Portfolio_Auth', 
+  base:process.env.VITE_BASE_PATH || '/', 
   server: {
     // 💡 ALL proxy rules must be inside this object
     proxy: {
