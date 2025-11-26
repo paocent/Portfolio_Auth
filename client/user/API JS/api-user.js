@@ -1,9 +1,9 @@
-const API_BASE = "/api/users";
+const API_URL = import.meta.env.VITE_API_URL;   // http://localhost:3000
+const API_BASE = `${API_URL}/api/users`;
 
 const handleResponse = async (response) => {
     try {
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (err) {
         console.error("Failed to parse response JSON:", err);
         throw err;
@@ -24,6 +24,7 @@ const create = async (user) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(user),
+            credentials: "include",
         });
         return await handleResponse(response);
     } catch (err) {
@@ -36,6 +37,7 @@ const list = async (signal) => {
         const response = await fetch(API_BASE, {
             method: "GET",
             signal,
+            credentials: "include",
         });
         return await handleResponse(response);
     } catch (err) {
@@ -53,6 +55,7 @@ const read = async ({ userId }, { t }, signal) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${t}`,
             },
+            credentials: "include",
         });
         return await handleResponse(response);
     } catch (err) {
@@ -70,6 +73,7 @@ const update = async ({ userId }, { t }, user) => {
                 Authorization: `Bearer ${t}`,
             },
             body: JSON.stringify(user),
+            credentials: "include",
         });
         return await handleResponse(response);
     } catch (err) {
@@ -86,6 +90,7 @@ const remove = async ({ userId }, { t }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${t}`,
             },
+            credentials: "include",
         });
         return await handleResponse(response);
     } catch (err) {

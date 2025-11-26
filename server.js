@@ -27,10 +27,12 @@
 //     }
 //     console.info('Server started on port %s.', config.port);
 // });
-
+import dotenv from 'dotenv';
+dotenv.config();
 import config from './config/config.js';
 import app from './server/express.js';
 import mongoose from 'mongoose';
+
 
 mongoose.Promise = global.Promise;
 
@@ -57,3 +59,7 @@ const PORT = config.port;
 app.listen(PORT, () => {
   console.info(`Server started on port ${PORT}`);
 });
+
+console.log("PORT:", process.env.PORT);
+console.log("MONGO:", process.env.MONGODB_URI);
+console.log("JWT:", process.env.JWT_SECRET);

@@ -11,16 +11,13 @@
 // }
 // export default config
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const config = {
   env: process.env.NODE_ENV || "development",
-
-  // Render requires the server to listen ONLY on process.env.PORT
   port: process.env.PORT,
-
-  // Must be set in Render Dashboard → Environment
-  jwtSecret: process.env.JWT_SECRET || "default_jwt_secret",
-
-  // MongoDB connection string (never hard-code credentials)
+  jwtSecret: process.env.JWT_SECRET || "defaultsecret",
   mongoUri: process.env.MONGODB_URI
 };
 

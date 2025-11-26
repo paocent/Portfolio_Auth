@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 const signin = async (user) => {
     try {
-        let response = await fetch("/auth/signin/", {
+        let response = await fetch(`${API_URL}/auth/signin`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -11,16 +13,16 @@ const signin = async (user) => {
         });
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.log("Signin API Error:", err);
     }
 };
 
 const signout = async () => {
     try {
-        let response = await fetch("/auth/signout/", { method: "GET" });
+        let response = await fetch(`${API_URL}/auth/signout`, { method: "GET" });
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.log("Signout API Error:", err);
     }
 };
 
