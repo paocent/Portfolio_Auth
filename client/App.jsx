@@ -2,8 +2,8 @@
  import { BrowserRouter as Router } from 'react-router-dom';
  import { ThemeProvider } from '@mui/material/styles'; // Updated import for MUI v5
  import CssBaseline from '@mui/material/CssBaseline'; // Optional: resets browser styling
- import MainRouter from '../(Removed)MainRouter';
- import theme from '../theme';
+ import MainRouter from './MainRouter';
+ import theme from './theme';
  const App = () => {
  return (
    <Router>

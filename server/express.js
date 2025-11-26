@@ -1,19 +1,21 @@
 import express from 'express'
-import bodyParser from 'body-parser' // Keep for reference, but express.json/urlencoded is preferred
-import cookieParser from 'cookie-parser' // Import once
+import path from 'path' // <-- FIX 1: Must import 'path' to use path.join()
+import cookieParser from 'cookie-parser'
 import compress from 'compression'
 import cors from 'cors'
 import helmet from 'helmet'
-import userRoutes from './routes/user.routes.js' 
+
+// Route Imports
+import userRoutes from './routes/user.routes.js'
 import authRoutes from './routes/auth.routes.js'
-import contactsRoutes from './routes/contacts.routes.js'  
+import contactsRoutes from './routes/contacts.routes.js'
 import educationRoutes from './routes/education.routes.js'
 import projectsRoutes from './routes/project.routes.js'
-import contactForms from './routes/contactsForm.routes.js' // Import contact form routes
+import contactForms from './routes/contactsForm.routes.js'
 
-
-// Fix 1: Removed duplicate 'import cookieParser from 'cookie-parser''
-// The import is handled above.
+// FIX 2: Define CURRENT_WORKING_DIR
+// This variable provides the root directory where the 'node server' command was executed.
+const CURRENT_WORKING_DIR = process.cwd()
 
 const app = express()
 
@@ -23,20 +25,17 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files - This line now works because 'path' and 'CURRENT_WORKING_DIR' are defined.
+app.use(express.static(path.join(CURRENT_WORKING_DIR, "dist/app")));
+
 // Use Cookie Parser (Handles req.cookies)
-app.use(cookieParser()); // <--- CORRECT POSITION
+app.use(cookieParser());
 
 // --- 2. Security/Utility Middleware ---
 
-app.use(compress()) // Compression should run early
-app.use(helmet())   // Helmet should run early for security
-app.use(cors())     // CORS should run early
-
-// --- Removed Redundant Body-Parser Calls ---
-// The following lines were redundant and placed too late:
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: true }))
-// app.use(cookieParser()) // Redundant and too late here
+app.use(compress())
+app.use(helmet())
+app.use(cors())
 
 // --- 3. Route Handlers (MUST be after parsing middleware) ---
 
@@ -45,20 +44,19 @@ app.use('/', contactsRoutes)
 app.use('/', authRoutes)
 app.use('/', educationRoutes)
 app.use('/', projectsRoutes)
-app.use('/', contactForms) // Add contact form routes
-
+app.use('/', contactForms)
 
 // --- 4. Error Handling Middleware (MUST be last) ---
 
 app.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-        // This handles errors from express-jwt (requireSignin)
-        res.status(401).json({"error" : err.name + ": " + err.message})
-    } else if (err) {
-        // Handles Mongoose validation errors or other general errors
-        res.status(400).json({"error" : err.name + ": " + err.message})
-        console.log(err)
-    }
+    if (err.name === 'UnauthorizedError') {
+        // This handles errors from express-jwt (requireSignin)
+        res.status(401).json({"error" : err.name + ": " + err.message})
+    } else if (err) {
+        // Handles Mongoose validation errors or other general errors
+        res.status(400).json({"error" : err.name + ": " + err.message})
+        console.log(err)
+    }
 })
 
 export default app
