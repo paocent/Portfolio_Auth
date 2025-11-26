@@ -1,9 +1,9 @@
 {
-  "name": "mern_skeleton",
+  "name": "portfolio_auth",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
-  "author": "Blessing",
+  "author": "Paolo Andrei",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.27.1",
