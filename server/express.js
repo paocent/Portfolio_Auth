@@ -23,26 +23,33 @@ const app = express();
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173"
-    
+    "http://127.0.0.1:5173",
+    "https://portfolio-auth-frontend-proj.onrender.com"
 ];
 
+const FRONTEND_URL = process.env.CORS_FRONTEND;
 app.use(
-    cors({
-        origin: function (origin, callback) {
-            // Allow Postman / mobile / curl (no origin)
-            if (!origin) return callback(null, true);
+  cors({
+    origin: function (origin, callback) {
+      // allow requests without origin (mobile, postman, curl)
+      if (!origin) return callback(null, true);
 
-            if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("CORS blocked: " + origin));
-            }
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
+      // allow frontend (Render deployed)
+      if (origin === FRONTEND_URL) return callback(null, true);
+
+      // allow localhost in dev
+      if (process.env.NODE_ENV !== "production") {
+        if (origin.startsWith("http://localhost") || origin.startsWith("http://127.0.0.1")) {
+          return callback(null, true);
+        }
+      }
+
+      return callback(new Error("CORS blocked: " + origin));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
 
 // ------------------------------------------------------------------
