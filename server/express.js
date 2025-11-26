@@ -24,7 +24,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://portfolio-auth-frontend-proj.onrender.com"
+    "https://portfolio-auth-frontend-proj.onrender.com", 
 ];
 
 const FRONTEND_URL = process.env.CORS_FRONTEND;
