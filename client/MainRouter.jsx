@@ -11,7 +11,7 @@ import StaticEducationPage from './src/education';
 import Project from './src/project';
 import Layout from './components/Layout';
 import Services from './src/Services';
-import Home from './components/home';
+import Home from './src/home';
 import Users from './user/Users-Menu/Users.jsx';
 import Signup from './user/Signup';
 import SignIn from './lib/SignIn';

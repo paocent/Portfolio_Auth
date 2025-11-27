@@ -9,6 +9,7 @@ return (
 <p>Welcome to my portfolio website!</p>
 <p>Here, you can find information about me, my skills, and some of the projects I've worked on.</p>
 <p>Feel free to explore and learn more about my journey in web development!</p>
+<p> </p>
 <p></p>
 
 </div>
